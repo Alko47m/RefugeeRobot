@@ -128,6 +128,7 @@ Public Class Form1
         End If
 
         'Spanish
+        'This is a comment
         If Spanish.Checked = True Then
             If input.Text <> "" Then
                 Do Until j = SpanishGreetingsCount
