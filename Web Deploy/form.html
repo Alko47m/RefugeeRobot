@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>Simple Web Frontend</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+	<script type="text/javascript">
+
+		function ConvertFormToJSON(form){
+			var array = jQuery(form).serializeArray();
+			var json = {};
+
+			jQuery.each(array, function() {
+				json[this.name] = this.value || '';
+			});
+
+			return json;
+		}
+
+		jQuery(document).on('ready', function() {
+			jQuery('form#talk-to-server').bind('submit', function(event){
+				event.preventDefault();
+
+				var form = this;
+				var json = ConvertFormToJSON(form);
+				var tbody = jQuery('#talk-to-server > tbody');
+				console.log(json);
+
+				$.ajax({
+					type: "POST",
+					url: "http://127.0.0.1:5000/talk",
+					data: json,
+					dataType: "application/json"
+				}).done(function(data) {
+						console.log(data);
+				}).fail(function(data) {
+					console.log(data);
+					console.log("Something's gone wrong on the backend - call Alex!");
+				});
+
+				return true;
+			});
+		});
+	</script>
+</head>
+<body>
+<div id="page">
+	<!-- [banner] -->
+	<header id="banner">
+		<hgroup>
+			<h1>Web frontend for this thing</h1>
+		</hgroup>
+	</header>
+	<!-- [content] -->
+	<section id="content">
+		<!-- [to-do] -->
+		<article id="to-do">
+			<section class="new-to-do">
+				<form id="talk-to-server">
+					<form class="form-vertical">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Form Name</legend>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="text">Talk to the robot!</label>
+  <div class="col-md-4">
+  <input id="text" name="text" type="text" placeholder="Hello!" class="form-control input-md" required="">
+
+  </div>
+</div>
+
+<!-- Multiple language (inline) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="language">Language</label>
+  <div class="col-md-4">
+    <label class="radio-inline" for="language-0">
+      <input type="radio" name="language" id="language-0" value="english" checked="checked">
+      English
+    </label>
+    <label class="radio-inline" for="language-1">
+      <input type="radio" name="language" id="language-1" value="french">
+      French
+    </label>
+    <label class="radio-inline" for="language-2">
+      <input type="radio" name="language" id="language-2" value="spanish">
+      Spanish
+    </label>
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="singlebutton"></label>
+  <div class="col-md-4">
+    <button id="singlebutton" name="singlebutton" class="btn btn-primary">Go!</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+		</article>
+		<!-- [/to-do] -->
+	</section>
+	<!-- [/content] -->
+</div>
+<!-- [/page] -->
+</body>
+</html>
